@@ -1,4 +1,4 @@
-# fastboot-java
+# Fastboot Java
 
 Android library for sending fastboot commands from an Android device to a device running fastboot.
 
@@ -13,7 +13,7 @@ List<String> deviceIds = FastbootDeviceManager.getAttachedDeviceIds();
 
 ### List Connected Fastboot Devices
 ```java
-List<String> deviceIds  = FastbootDeviceManager.getConnectedDeviceIds();
+List<String> deviceIds = FastbootDeviceManager.getConnectedDeviceIds();
 ```
 
 ### Connect to a Fastboot Device
@@ -22,12 +22,12 @@ FastbootDeviceManager.addFastbootDeviceManagerListener(
     new FastbootDeviceManagerListener() {
         @Override
         public void onFastbootDeviceAttached(String deviceId) {
-            Log.d("Device attached: " + deviceId);
+            
         }
 
         @Override
         public void onFastbootDeviceDetached(String deviceId) {
-            Log.d("Device detached: " + deviceId);
+            
         }
 
         @Override
@@ -35,7 +35,6 @@ FastbootDeviceManager.addFastbootDeviceManagerListener(
             // Do some fastboot stuff...
             FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("current-slot"));
             FastbootResponse bootSlot = response.data;
-            Log.d("Device " + deviceId + " with slot " + bootSlot + ".");
         }
     });
 
