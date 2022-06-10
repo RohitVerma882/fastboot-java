@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rv882.fastbootjava">
+		  
+	<uses-permission android:name="android.permission.USB_PERMISSION" />
+
+	<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+  <application>
+	  
+    <provider
+        android:name=".FastbootInitProvider"
+        android:authorities=".FastbootInitProvider"
+        android:exported="false"/>
+	
+  </application>
+
+</manifest>

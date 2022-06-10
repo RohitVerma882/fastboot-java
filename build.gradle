@@ -1,0 +1,41 @@
+buildscript {
+	ext.nav_version = "2.4.2"
+	ext.paging_version = "3.1.1"
+	
+    repositories {
+        google()
+        mavenCentral()
+		jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.0'
+		classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+		jcenter()
+		maven { url "https://jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    compileSdkVersion = 32
+    buildToolsVersion = '32.0.0'
+	
+    minSdkVersion = 24
+	targetSdkVersion = 32
+	
+	versionCode = 1
+    versionName = "1.0.0"
+}
