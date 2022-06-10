@@ -4,7 +4,7 @@ import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbDeviceConnection;
 
-public class UsbTransport implements Transport {
+class UsbTransport implements Transport {
 	private final UsbInterface fastbootInterface;
     private final UsbDeviceConnection connection;
     private boolean isConnected;

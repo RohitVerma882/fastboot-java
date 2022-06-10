@@ -4,18 +4,16 @@ import android.content.ContentProvider;
 import android.net.Uri;
 import android.database.Cursor;
 import android.content.ContentValues;
-import android.util.Log;
 
-public class FastbootInitProvider extends ContentProvider {
-	private static final String TAG = FastbootInitProvider.class.getSimpleName();
-
+class FastbootInitProvider extends ContentProvider {
+	
 	@Override
 	public boolean onCreate() {
 		try {
             if (getContext() == null) throw new Exception("Failed to get context.");
             FastbootMobile.initialize(getContext());
         } catch (Exception ex) {
-            Log.i(TAG, "Failed to auto initialize the FastbootMobile library", ex);
+            
         }
 		return false;
 	}

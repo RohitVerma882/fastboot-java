@@ -1,44 +1,40 @@
 package com.rv882.fastbootjava;
 
-public final class FastbootCommand {
+class FastbootCommand {
 	public final FastbootCommand oem(final String arg) {
-		return new FastbootCommand("oem " + arg);
-	}
-	
-	public final FastbootCommand verify(final String data) {
-		return new FastbootCommand("verify:" + data);
-	}
-	
-	public final FastbootCommand flash(final String mode) {
-		return new FastbootCommand("flash:" + mode);
+		return command(String.format("oem %s", arg));
 	}
 	
 	public final FastbootCommand download(final String data) {
-		return new FastbootCommand("download:" + data);
+		return command(String.format("download:%s", data));
 	}
 	
 	public final FastbootCommand getVar(final String variable) {
-		return new FastbootCommand("getvar:" + variable);
+		return command(String.format("getvar:%s", variable));
 	}
 	
 	public final FastbootCommand setActiveSlot(final String slot) {
-		return new FastbootCommand("set_active:" + slot);
+		return command(String.format("set_active:%s", slot));
 	}
 	
 	public final FastbootCommand reboot() {
-		return new FastbootCommand("reboot");
+		return command("reboot");
 	}
 	
 	public final FastbootCommand rebootBootloader() {
-		return new FastbootCommand("reboot-bootloader");
+		return command("reboot-bootloader");
 	}
 	
 	public final FastbootCommand powerDown() {
-		return new FastbootCommand("powerdown");
+		return command("powerdown");
 	}
 
 	public final FastbootCommand continueBooting() {
-		return new FastbootCommand("continue");
+		return command("continue");
+	}
+	
+	public FastbootCommand command(String command) {
+		return new FastbootCommand(command);
 	}
 	
     private final String command;

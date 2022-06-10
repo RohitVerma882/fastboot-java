@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.lang.ref.WeakReference;
 
-public final class FastbootMobile {
+class FastbootMobile {
 	private static WeakReference<Context> applicationContext;
 
     public static final synchronized void initialize(final Context context) {
