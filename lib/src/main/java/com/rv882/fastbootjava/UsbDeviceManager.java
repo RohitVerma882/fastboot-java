@@ -15,12 +15,17 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 
+import androidx.annotation.NonNull;
+
 @SuppressLint("UnspecifiedImmutableFlag")
 public class UsbDeviceManager {
 	private static final String ACTION_USB_PERMISSION = "com.rv882.fastbootjava.USB_PERMISSION";
 
-    private final WeakReference<Context> context;
-    private final ArrayList<UsbDeviceManagerListener> listeners;
+	@NonNull
+    private WeakReference<Context> context;
+	@NonNull
+    private ArrayList<UsbDeviceManagerListener> listeners;
+	@NonNull
     private UsbManager usbManager;
 
 	private BroadcastReceiver usbActionReceiver = new BroadcastReceiver() {
@@ -57,7 +62,7 @@ public class UsbDeviceManager {
         }
     };
 
-    public UsbDeviceManager(final WeakReference<Context> context) {
+    public UsbDeviceManager(@NonNull WeakReference<Context> context) {
         this.context = context;
         listeners = new ArrayList<UsbDeviceManagerListener>();
 
@@ -71,18 +76,18 @@ public class UsbDeviceManager {
         }
     }
 
-    public final void addUsbDeviceManagerListener(final UsbDeviceManagerListener listener) {
+    public void addUsbDeviceManagerListener(@NonNull UsbDeviceManagerListener listener) {
         listeners.add(listener);
         if (listeners.size() == 1) {
-            final IntentFilter usbActionFilter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-            usbActionFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
             if (context.get() != null) {
+				IntentFilter usbActionFilter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+				usbActionFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
                 context.get().registerReceiver(usbActionReceiver, usbActionFilter);
             }
         }
     }
 
-    public final void removeUsbDeviceManagerListener(final UsbDeviceManagerListener listener) {
+    public void removeUsbDeviceManagerListener(@NonNull UsbDeviceManagerListener listener) {
         listeners.remove(listener);
         if (listeners.size() == 0) {
             if (context.get() != null) {
@@ -91,12 +96,13 @@ public class UsbDeviceManager {
         }
     }
 
-    public final Map<String, UsbDevice> getDevices() {
+	@NonNull
+    public Map<String, UsbDevice> getDevices() {
         return usbManager.getDeviceList();
     }
 
-    public final void connectToDevice(final UsbDevice device) {
-        final PendingIntent permissionIntent = PendingIntent.getBroadcast(context.get(), 0, new Intent(ACTION_USB_PERMISSION), 0);
+    public void connectToDevice(@NonNull UsbDevice device) {
+        PendingIntent permissionIntent = PendingIntent.getBroadcast(context.get(), 0, new Intent(ACTION_USB_PERMISSION), 0);
         if (usbManager.hasPermission(device)) {
             connectToDeviceInternal(device);
         } else {
@@ -104,9 +110,9 @@ public class UsbDeviceManager {
         }
     }
 
-    private final void connectToDeviceInternal(final UsbDevice device) {
-        final UsbDeviceConnection connection = usbManager.openDevice(device);
-        for (final UsbDeviceManagerListener listener : listeners) {
+    private void connectToDeviceInternal(UsbDevice device) {
+        UsbDeviceConnection connection = usbManager.openDevice(device);
+        for (UsbDeviceManagerListener listener : listeners) {
             if (listener.filterDevice(device)) {
                 listener.onUsbDeviceConnected(device, connection);
             }

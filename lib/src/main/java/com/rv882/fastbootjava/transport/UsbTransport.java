@@ -3,30 +3,36 @@ package com.rv882.fastbootjava.transport;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbConstants;
+
+import androidx.annotation.NonNull;
 
 public class UsbTransport implements Transport {
-	private final UsbInterface fastbootInterface;
-    private final UsbDeviceConnection connection;
-    private boolean isConnected;
+	@NonNull
+	private UsbInterface fastbootInterface;
+	@NonNull
+    private UsbDeviceConnection connection;
+    private boolean isConnected = false;
     private UsbEndpoint inEndpoint;
     private UsbEndpoint outEndpoint;
 
-	public UsbTransport(final UsbInterface fastbootInterface, final UsbDeviceConnection connection) {
+	public UsbTransport(@NonNull UsbInterface fastbootInterface, @NonNull UsbDeviceConnection connection) {
         this.fastbootInterface = fastbootInterface;
         this.connection = connection;
 
-        for (int i = 0; i < this.fastbootInterface.getEndpointCount(); ++i) {
-            final UsbEndpoint e1 = this.fastbootInterface.getEndpoint(i);
-            if (e1.getDirection() == 128) {
-                this.inEndpoint = e1;
+        for (int i = 0; i < fastbootInterface.getEndpointCount(); ++i) {
+            UsbEndpoint e1 = fastbootInterface.getEndpoint(i);
+            if (e1.getDirection() == UsbConstants.USB_DIR_IN) {
+                inEndpoint = e1;
             } else {
-                this.outEndpoint = e1;
+                outEndpoint = e1;
             }
         }
-        if (this.inEndpoint == null) {
+		
+        if (inEndpoint == null) {
             throw new RuntimeException("No endpoint found for input.");
         }
-        if (this.outEndpoint == null) {
+        if (outEndpoint == null) {
             throw new RuntimeException("No endpoint found for output.");
         }
     }
@@ -63,12 +69,12 @@ public class UsbTransport implements Transport {
 	}
 
 	@Override
-	public void send(byte[] buffer, int timeout) {
+	public void send(@NonNull byte[] buffer, int timeout) {
 		connection.bulkTransfer(outEndpoint, buffer, buffer.length, timeout);
 	}
 
 	@Override
-	public void receive(byte[] buffer, int timeout) {
+	public void receive(@NonNull byte[] buffer, int timeout) {
 		connection.bulkTransfer(inEndpoint, buffer, buffer.length, timeout);
 	}
 }

@@ -1,47 +1,61 @@
 package com.rv882.fastbootjava;
 
+import androidx.annotation.NonNull;
+
 public class FastbootCommand {
-	public final FastbootCommand oem(final String arg) {
+	@NonNull
+	public FastbootCommand oem(@NonNull String arg) {
 		return command(String.format("oem %s", arg));
 	}
 	
-	public final FastbootCommand download(final String data) {
+	@NonNull
+	public FastbootCommand download(@NonNull String data) {
 		return command(String.format("download:%s", data));
 	}
 	
-	public final FastbootCommand getVar(final String variable) {
+	@NonNull
+	public FastbootCommand getVar(@NonNull String variable) {
 		return command(String.format("getvar:%s", variable));
 	}
 	
-	public final FastbootCommand setActiveSlot(final String slot) {
+	@NonNull
+	public FastbootCommand setActiveSlot(@NonNull String slot) {
 		return command(String.format("set_active:%s", slot));
 	}
 	
-	public final FastbootCommand reboot() {
+	@NonNull
+	public FastbootCommand reboot() {
 		return command("reboot");
 	}
 	
-	public final FastbootCommand rebootBootloader() {
+	@NonNull
+	public FastbootCommand rebootBootloader() {
 		return command("reboot-bootloader");
 	}
 	
-	public final FastbootCommand powerDown() {
+	@NonNull
+	public FastbootCommand powerDown() {
 		return command("powerdown");
 	}
 
-	public final FastbootCommand continueBooting() {
+	@NonNull
+	public FastbootCommand continueBooting() {
 		return command("continue");
 	}
 	
-	public FastbootCommand command(String command) {
+	@NonNull
+	public FastbootCommand command(@NonNull String command) {
 		return new FastbootCommand(command);
 	}
 	
-    private final String command;
-    private FastbootCommand(final String command) {
+	@NonNull
+    private String command;
+	
+    private FastbootCommand(String command) {
         this.command = command;
     }
 
+	@NonNull
     @Override
     public String toString() {
         return command;

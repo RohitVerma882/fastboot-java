@@ -2,31 +2,39 @@ package com.rv882.fastbootjava;
 
 import java.nio.charset.StandardCharsets;
 
-public class FastbootResponse {
-    private final ResponseStatus status;
-    private final String data;
+import androidx.annotation.NonNull;
 
-	public FastbootResponse(final ResponseStatus status, final String data) {
+public class FastbootResponse {
+	@NonNull
+    private ResponseStatus status;
+	@NonNull
+    private String data;
+
+	public FastbootResponse(@NonNull ResponseStatus status, @NonNull String data) {
         this.status = status;
         this.data = data;
     }
 
-    public final ResponseStatus getStatus() {
-        return this.status;
+	@NonNull
+    public ResponseStatus getStatus() {
+        return status;
     }
 
-    public final String getData() {
-        return this.data;
+	@NonNull
+    public String getData() {
+        return data;
     }
 
-    public static final FastbootResponse fromBytes(final byte[] arr) {
+	@NonNull
+    public static FastbootResponse fromBytes(@NonNull byte[] arr) {
         return fromString(new String(arr, StandardCharsets.UTF_8));
     }
 
-    public static final FastbootResponse fromString(final String str) {
-		final String substring = str.substring(0, 4);
-		final ResponseStatus value = ResponseStatus.valueOf(substring);
-		final String substring2 = str.substring(4);
+	@NonNull
+    public static FastbootResponse fromString(@NonNull String str) {
+		String substring = str.substring(0, 4);
+		ResponseStatus value = ResponseStatus.valueOf(substring);
+		String substring2 = str.substring(4);
 		return new FastbootResponse(value, substring2);
 	}
 
@@ -36,13 +44,16 @@ public class FastbootResponse {
         OKAY("OKAY"),
         DATA("DATA");
 
-		private final String text;
-        private ResponseStatus(final String text) {
+		@NonNull
+		private String text;
+		
+        private ResponseStatus(String text) {
             this.text = text;
         }
 
-        public final String getText() {
-            return this.text;
+		@NonNull
+        public String getText() {
+            return text;
         }
     }
 }
