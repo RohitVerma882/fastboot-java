@@ -34,7 +34,7 @@ FastbootDeviceManager.addFastbootDeviceManagerListener(
         public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
             // Do some fastboot stuff...
             FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("current-slot"));
-            FastbootResponse bootSlot = response.data;
+            FastbootResponse bootSlot = response.getData();
         }
     });
 
