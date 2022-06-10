@@ -1,20 +1,28 @@
 package com.rv882.fastbootjava;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.lang.ref.WeakReference;
 import android.content.Context;
-import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbDevice;
-import com.rv882.fastbootjava.transport.UsbTransport;
-import android.hardware.usb.UsbInterface;
-import com.rv882.fastbootjava.transport.Transport;
-import java.util.List;
-import java.util.Set;
-import java.util.Collections;
-import java.util.Arrays;
 import android.util.Pair;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.Map;
+import java.util.Set;
+import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.Iterator;
+
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbInterface;
+
+import com.rv882.fastbootjava.transport.Transport;
+import com.rv882.fastbootjava.transport.UsbTransport;
 
 public class FastbootDeviceManager {
     private static final int USB_CLASS = 0xff;
@@ -25,7 +33,7 @@ public class FastbootDeviceManager {
     private static final UsbDeviceManager usbDeviceManager = new UsbDeviceManager(new WeakReference<Context>(FastbootMobile.getApplicationContext()));
     private static final ArrayList<FastbootDeviceManagerListener> listeners = new ArrayList<FastbootDeviceManagerListener>();
 
-	private static UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
+	private UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
 		@Override
 		public boolean filterDevice(UsbDevice device) {
 			return filterDevice(device);
@@ -53,8 +61,7 @@ public class FastbootDeviceManager {
 		@Override
 		public synchronized void onUsbDeviceConnected(UsbDevice device, UsbDeviceConnection connection) {
 			Transport transport = new UsbTransport(findFastbootInterface(device), connection);
-			FastbootDeviceContext deviceContext = new FastbootDeviceContext(
-				transport);
+			FastbootDeviceContext deviceContext = new FastbootDeviceContext(transport);
 
             connectedDevices.get(device.getSerialNumber()).close();
             connectedDevices.put(device.getSerialNumber(), deviceContext);
@@ -100,19 +107,52 @@ public class FastbootDeviceManager {
         }
     }
 
-	public synchronized void connectToDevice(String deviceId) {
-		
+	public synchronized void connectToDevice(final String deviceId) {
+		List<UsbDevice> devices = usbDeviceManager.getDevices().values().stream()
+			.filter(new Predicate<UsbDevice>() {
+				@Override
+				public boolean test(UsbDevice p1) {
+					return filterDevice(p1);
+				}
+			}).collect(Collectors.toList());
+
+		Iterator<UsbDevice> it = devices.iterator();
+		while (it.hasNext()) {
+			UsbDevice device = it.next();
+			if (device.getSerialNumber().equals(deviceId)) {
+				usbDeviceManager.connectToDevice(device);
+				break;
+			}
+		}
 	}
-	
+
 	public List<String> getAttachedDeviceIds() {
-		return null;
+		return usbDeviceManager.getDevices().values().stream()
+		    .filter(new Predicate<UsbDevice>() {
+				@Override
+				public boolean test(UsbDevice p1) {
+					return filterDevice(p1);
+				}
+			}).map(new Function<UsbDevice, String>() {
+				@Override
+				public String apply(UsbDevice p1) {
+					return p1.getSerialNumber();
+				}
+			}).collect(Collectors.toList());
 	}
-	
+
 	public List<String> getConnectedDeviceIds() {
-		return null;
+		return connectedDevices.keySet().stream().collect(Collectors.toList());
 	}
-	
+
     public final synchronized Pair<String, FastbootDeviceContext> getDeviceContext(final String deviceId) {
-     return null;
+		final Set<Map.Entry<String, FastbootDeviceContext>> entrys = connectedDevices.entrySet();
+		for (final Map.Entry<String, FastbootDeviceContext> entry : entrys) {
+			if (entry.getKey().equals(deviceId)) {
+				Pair<String, FastbootDeviceContext> pair = new Pair<String, FastbootDeviceContext>(entry.getKey(), entry.getValue());
+				return pair;
+			}
+		}
+		return null;
 	}
 }

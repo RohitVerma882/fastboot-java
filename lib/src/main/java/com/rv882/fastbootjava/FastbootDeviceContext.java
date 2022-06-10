@@ -8,12 +8,8 @@ class FastbootDeviceContext {
 	private static final int DEFAULT_TIMEOUT = 1000;
 
     private final Transport transport;
-	
-	public FastbootDeviceContext newDeviceContext(Transport transport) {
-		return new FastbootDeviceContext(transport);
-	}
 
-    public FastbootDeviceContext(final Transport transport) {
+    public final FastbootDeviceContext(final Transport transport) {
         this.transport = transport;
     }
 	
