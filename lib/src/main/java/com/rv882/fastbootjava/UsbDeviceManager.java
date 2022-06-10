@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
+import android.annotation.SuppressLint;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 
+@SuppressLint("UnspecifiedImmutableFlag")
 public class UsbDeviceManager {
 	private static final String ACTION_USB_PERMISSION = "com.rv882.fastbootjava.USB_PERMISSION";
 
