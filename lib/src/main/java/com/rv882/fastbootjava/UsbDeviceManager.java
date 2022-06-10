@@ -14,7 +14,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 
-class UsbDeviceManager {
+public class UsbDeviceManager {
 	private static final String ACTION_USB_PERMISSION = "com.rv882.fastbootjava.USB_PERMISSION";
 
     private final WeakReference<Context> context;

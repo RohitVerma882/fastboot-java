@@ -4,12 +4,12 @@ import java.nio.charset.StandardCharsets;
 
 import com.rv882.fastbootjava.transport.Transport;
 
-class FastbootDeviceContext {
+public class FastbootDeviceContext {
 	private static final int DEFAULT_TIMEOUT = 1000;
 
     private final Transport transport;
 
-    public final FastbootDeviceContext(final Transport transport) {
+    public FastbootDeviceContext(final Transport transport) {
         this.transport = transport;
     }
 	

@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.database.Cursor;
 import android.content.ContentValues;
 
-class FastbootInitProvider extends ContentProvider {
+public class FastbootInitProvider extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {

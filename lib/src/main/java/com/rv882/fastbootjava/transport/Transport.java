@@ -1,6 +1,6 @@
 package com.rv882.fastbootjava.transport;
 
-interface Transport {
+public interface Transport {
     boolean isConnected();
 
     void setConnected(final boolean isConnected);

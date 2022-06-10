@@ -1,6 +1,6 @@
 package com.rv882.fastbootjava;
 
-class FastbootCommand {
+public class FastbootCommand {
 	public final FastbootCommand oem(final String arg) {
 		return command(String.format("oem %s", arg));
 	}
