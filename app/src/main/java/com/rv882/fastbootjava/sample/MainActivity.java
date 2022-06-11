@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 		
 		textview = findViewById(R.id.text);
 		
-		FastbootDeviceManager.INSTANCE.addFastbootDeviceManagerListener(this);
+		FastbootDeviceManager.getInstance().addFastbootDeviceManagerListener(this);
     }
 	
 	@Override
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 
 	@Override
 	protected void onDestroy() {
-		FastbootDeviceManager.INSTANCE.removeFastbootDeviceManagerListener(this);
+		FastbootDeviceManager.getInstance().removeFastbootDeviceManagerListener(this);
 		closeDeviceContext();
 		super.onDestroy();
 	}

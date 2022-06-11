@@ -23,7 +23,7 @@ public class UsbDeviceManager {
 	@NonNull
     private WeakReference<Context> context;
 	@NonNull
-    private ArrayList<UsbDeviceManagerListener> listeners = new ArrayList<UsbDeviceManagerListener>();
+    private ArrayList<UsbDeviceManagerListener> listeners = new ArrayList<>();
 	@NonNull
     private UsbManager usbManager;
 
@@ -31,15 +31,15 @@ public class UsbDeviceManager {
 		@Override
         public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-            if (intent == null || action == null) return;
-			if (action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
+            if (intent == null) return;
+			if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
 				for (UsbDeviceManagerListener listener : listeners) {
 					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 					if (listener.filterDevice(device)) {
 						listener.onUsbDeviceAttached(device);
 					}
 				}
-			} else if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
+			} else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
 				for (UsbDeviceManagerListener listener : listeners) {
 					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 					if (listener.filterDevice(device)) {

@@ -33,18 +33,34 @@ public class FastbootDeviceManager {
     private static final int USB_PROTOCOL = 0x03;
 
 	@NonNull
-    private static HashMap<String, FastbootDeviceContext> connectedDevices = new HashMap<String, FastbootDeviceContext>();
+    private static HashMap<String, FastbootDeviceContext> connectedDevices = new HashMap<>();
     @NonNull
 	private static UsbDeviceManager usbDeviceManager = new UsbDeviceManager(new WeakReference<Context>(FastbootMobile.getApplicationContext()));
     @NonNull
-	private static ArrayList<FastbootDeviceManagerListener> listeners = new ArrayList<FastbootDeviceManagerListener>();
+	private static ArrayList<FastbootDeviceManagerListener> listeners = new ArrayList<>();
 	@NonNull
-    public static FastbootDeviceManager INSTANCE = new FastbootDeviceManager();
+    private static volatile FastbootDeviceManager Instance = new FastbootDeviceManager();
+	
+	private FastbootDeviceManager() {
+	}
+	
+	public static FastbootDeviceManager getInstance() {
+        FastbootDeviceManager localInstance = Instance;
+        if (localInstance == null) {
+            synchronized (FastbootDeviceManager.class) {
+                localInstance = Instance;
+                if (localInstance == null) {
+                    Instance = localInstance = new FastbootDeviceManager();
+                }
+            }
+        }
+        return localInstance;
+    }
 	
 	private UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
 		@Override
 		public boolean filterDevice(@NonNull UsbDevice device) {
-			return FastbootDeviceManager.INSTANCE.filterDevice(device);
+			return Instance.filterDevice(device);
 		}
 
 		@Override
@@ -72,7 +88,7 @@ public class FastbootDeviceManager {
 			if (deviceContext0 != null) {
 				deviceContext0.close();
 			}
-			FastbootDeviceContext deviceContext = new FastbootDeviceContext(new UsbTransport(FastbootDeviceManager.INSTANCE.findFastbootInterface(device), connection));
+			FastbootDeviceContext deviceContext = new FastbootDeviceContext(new UsbTransport(Instance.findFastbootInterface(device), connection));
             connectedDevices.put(device.getSerialNumber(), deviceContext);
 			for (FastbootDeviceManagerListener listener : listeners) {
 				listener.onFastbootDeviceConnected(device.getSerialNumber(), deviceContext);
