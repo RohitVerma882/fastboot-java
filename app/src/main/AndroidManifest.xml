@@ -12,8 +12,7 @@
 		android:largeHeap="true"
 		android:supportsRtl="false"
 		android:theme="@style/AppTheme"
-		tools:replace="android:supportsRtl"
-		tools:ignore="UnusedAttribute,MediaCapabilities">
+		tools:replace="android:supportsRtl">
 		
 		<activity android:name=".MainActivity"
 			android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"

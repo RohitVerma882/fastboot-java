@@ -4,7 +4,7 @@ Android library for sending fastboot commands from an Android device to a device
 
 ***Only supports fastboot over USB On-The-Go (OTG) connections.***
 
-Original: https://github.com/google/fastboot-mobile
+Original-source: https://github.com/google/fastboot-mobile
 
 ## Usage
 ### List Attached Fastboot Devices
@@ -23,17 +23,17 @@ List<String> deviceIds = FastbootDeviceManager.getConnectedDeviceIds();
 FastbootDeviceManager.addFastbootDeviceManagerListener(
     new FastbootDeviceManagerListener() {
         @Override
-        public void onFastbootDeviceAttached(String deviceId) {
+        public void onFastbootDeviceAttached(@NonNull String deviceId) {
             
         }
 
         @Override
-        public void onFastbootDeviceDetached(String deviceId) {
+        public void onFastbootDeviceDetached(@NonNull String deviceId) {
             
         }
 
         @Override
-        public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
+        public void onFastbootDeviceConnected(@NonNull String deviceId, @NonNull FastbootDeviceContext deviceContext) {
             // Do some fastboot stuff...
             FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("current-slot"));
             String bootSlot = response.getData();
