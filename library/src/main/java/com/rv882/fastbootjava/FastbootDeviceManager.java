@@ -28,9 +28,9 @@ import com.rv882.fastbootjava.transport.Transport;
 import com.rv882.fastbootjava.transport.UsbTransport;
 
 public class FastbootDeviceManager {
-    private static int USB_CLASS = 0xff;
-    private static int USB_SUBCLASS = 0x42;
-    private static int USB_PROTOCOL = 0x03;
+    private static final int USB_CLASS = 0xff;
+    private static final int USB_SUBCLASS = 0x42;
+    private static final int USB_PROTOCOL = 0x03;
 
 	@NonNull
     private static HashMap<String, FastbootDeviceContext> connectedDevices = new HashMap<String, FastbootDeviceContext>();
@@ -121,7 +121,7 @@ public class FastbootDeviceManager {
 	}
 
 	@NonNull
-	public List<String> getAttachedDeviceIds() {
+	public synchronized List<String> getAttachedDeviceIds() {
 		return usbDeviceManager.getDevices().values().stream()
 		    .filter(new Predicate<UsbDevice>() {
 				@Override
@@ -137,7 +137,7 @@ public class FastbootDeviceManager {
 	}
 
 	@NonNull
-	public List<String> getConnectedDeviceIds() {
+	public synchronized List<String> getConnectedDeviceIds() {
 		return connectedDevices.keySet().stream().collect(Collectors.toList());
 	}
 
