@@ -87,18 +87,6 @@ public class FastbootDeviceManager {
         return findFastbootInterface(device) != null;
     }
 
-	private static UsbInterface findFastbootInterface(UsbDevice device) {
-        for (int i = 0; i < device.getInterfaceCount(); i++) {
-            UsbInterface deviceInterface = device.getInterface(i);
-            if (deviceInterface.getInterfaceClass() == USB_CLASS &&
-				deviceInterface.getInterfaceSubclass() == USB_SUBCLASS &&
-				deviceInterface.getInterfaceProtocol() == USB_PROTOCOL) {
-                return deviceInterface;
-            }
-        }
-        return null;
-    }
-
     public synchronized void addFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
         listeners.add(listener);
         if (listeners.size() == 1) {
@@ -121,6 +109,7 @@ public class FastbootDeviceManager {
 					return filterDevice(p1);
 				}
 			}).collect(Collectors.toList());
+			
 		Iterator<UsbDevice> it = devices.iterator();
 		while (it.hasNext()) {
 			UsbDevice device = it.next();
@@ -156,10 +145,22 @@ public class FastbootDeviceManager {
     public synchronized Pair<String, FastbootDeviceContext> getDeviceContext(@NonNull String deviceId) {
 		Set<Map.Entry<String, FastbootDeviceContext>> entrys = connectedDevices.entrySet();
 		for (Map.Entry<String, FastbootDeviceContext> entry : entrys) {
-			if (entry.getKey().equals(deviceId)) {
+			if (entry.getKey().contains(deviceId)) {
 				return new Pair<String, FastbootDeviceContext>(entry.getKey(), entry.getValue());
 			}
 		}
 		return null;
 	}
+	
+	private static UsbInterface findFastbootInterface(UsbDevice device) {
+        for (int i = 0; i < device.getInterfaceCount(); i++) {
+            UsbInterface deviceInterface = device.getInterface(i);
+            if (deviceInterface.getInterfaceClass() == USB_CLASS &&
+				deviceInterface.getInterfaceSubclass() == USB_SUBCLASS &&
+				deviceInterface.getInterfaceProtocol() == USB_PROTOCOL) {
+                return deviceInterface;
+            }
+        }
+        return null;
+    }
 }

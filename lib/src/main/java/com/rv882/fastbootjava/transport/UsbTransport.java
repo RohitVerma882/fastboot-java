@@ -28,7 +28,6 @@ public class UsbTransport implements Transport {
                 outEndpoint = e1;
             }
         }
-		
         if (inEndpoint == null) {
             throw new RuntimeException("No endpoint found for input.");
         }

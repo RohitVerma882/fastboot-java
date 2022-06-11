@@ -16,7 +16,7 @@ public class FastbootMobile {
 	@NonNull
     public static Context getApplicationContext() {
 		if (applicationContext.get() == null) {
-            throw new RuntimeException("FastbootMobile not initialized.");
+            throw new RuntimeException("FastbootJava not initialized.");
         }
         return applicationContext.get();
     }

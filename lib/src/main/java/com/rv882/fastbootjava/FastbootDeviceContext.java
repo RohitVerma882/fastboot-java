@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import com.rv882.fastbootjava.transport.Transport;
 
 public class FastbootDeviceContext {
-	private static int DEFAULT_TIMEOUT = 1000;
+	private static final int DEFAULT_TIMEOUT = 1000;
 
 	@NonNull
     private Transport transport;
@@ -27,11 +27,10 @@ public class FastbootDeviceContext {
             transport.connect(force);
         }
         String commandStr = command.toString();
-        Transport transport = this.transport;
         byte[] bytes = commandStr.getBytes(StandardCharsets.UTF_8);
         transport.send(bytes, timeout);
         byte[] responseBytes = new byte[64];
-        this.transport.receive(responseBytes, timeout);
+        transport.receive(responseBytes, timeout);
         return FastbootResponse.fromBytes(responseBytes);
     }
 
