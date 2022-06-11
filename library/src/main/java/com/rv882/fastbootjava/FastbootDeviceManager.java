@@ -39,7 +39,7 @@ public class FastbootDeviceManager {
     @NonNull
 	private static ArrayList<FastbootDeviceManagerListener> listeners = new ArrayList<FastbootDeviceManagerListener>();
 
-	private UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
+	private static UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
 		@Override
 		public boolean filterDevice(@NonNull UsbDevice device) {
 			return filterDevice(device);
@@ -87,21 +87,21 @@ public class FastbootDeviceManager {
         return findFastbootInterface(device) != null;
     }
 
-    public synchronized void addFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
+    public static synchronized void addFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
         listeners.add(listener);
         if (listeners.size() == 1) {
             usbDeviceManager.addUsbDeviceManagerListener(usbDeviceManagerListener);
         }
     }
 
-    public synchronized void removeFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
+    public static synchronized void removeFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
         listeners.remove(listener);
         if (listeners.size() == 0) {
             usbDeviceManager.removeUsbDeviceManagerListener(usbDeviceManagerListener);
         }
     }
 
-	public synchronized void connectToDevice(@NonNull String deviceId) {
+	public static synchronized void connectToDevice(@NonNull String deviceId) {
 		List<UsbDevice> devices = usbDeviceManager.getDevices().values().stream()
 			.filter(new Predicate<UsbDevice>() {
 				@Override
@@ -121,7 +121,7 @@ public class FastbootDeviceManager {
 	}
 
 	@NonNull
-	public synchronized List<String> getAttachedDeviceIds() {
+	public static synchronized List<String> getAttachedDeviceIds() {
 		return usbDeviceManager.getDevices().values().stream()
 		    .filter(new Predicate<UsbDevice>() {
 				@Override
@@ -137,12 +137,12 @@ public class FastbootDeviceManager {
 	}
 
 	@NonNull
-	public synchronized List<String> getConnectedDeviceIds() {
+	public static synchronized List<String> getConnectedDeviceIds() {
 		return connectedDevices.keySet().stream().collect(Collectors.toList());
 	}
 
 	@Nullable
-    public synchronized Pair<String, FastbootDeviceContext> getDeviceContext(@NonNull String deviceId) {
+    public static synchronized Pair<String, FastbootDeviceContext> getDeviceContext(@NonNull String deviceId) {
 		Set<Map.Entry<String, FastbootDeviceContext>> entrys = connectedDevices.entrySet();
 		for (Map.Entry<String, FastbootDeviceContext> entry : entrys) {
 			if (entry.getKey().contains(deviceId)) {

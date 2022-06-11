@@ -23,17 +23,17 @@ List<String> deviceIds = FastbootDeviceManager.getConnectedDeviceIds();
 FastbootDeviceManager.addFastbootDeviceManagerListener(
     new FastbootDeviceManagerListener() {
         @Override
-        public void onFastbootDeviceAttached(@NonNull String deviceId) {
+        public void onFastbootDeviceAttached(String deviceId) {
             
         }
 
         @Override
-        public void onFastbootDeviceDetached(@NonNull String deviceId) {
+        public void onFastbootDeviceDetached(String deviceId) {
             
         }
 
         @Override
-        public void onFastbootDeviceConnected(@NonNull String deviceId, @NonNull FastbootDeviceContext deviceContext) {
+        public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
             // Do some fastboot stuff...
             FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("current-slot"));
             String bootSlot = response.getData();
