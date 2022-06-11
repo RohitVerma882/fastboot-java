@@ -38,11 +38,13 @@ public class FastbootDeviceManager {
 	private static UsbDeviceManager usbDeviceManager = new UsbDeviceManager(new WeakReference<Context>(FastbootMobile.getApplicationContext()));
     @NonNull
 	private static ArrayList<FastbootDeviceManagerListener> listeners = new ArrayList<FastbootDeviceManagerListener>();
-
-	private static UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
+	@NonNull
+    public static FastbootDeviceManager INSTANCE = new FastbootDeviceManager();
+	
+	private UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
 		@Override
 		public boolean filterDevice(@NonNull UsbDevice device) {
-			return filterDevice(device);
+			return FastbootDeviceManager.INSTANCE.filterDevice(device);
 		}
 
 		@Override
@@ -54,11 +56,11 @@ public class FastbootDeviceManager {
 
 		@Override
 		public synchronized void onUsbDeviceDetached(@NonNull UsbDevice device) {
-			if (connectedDevices.containsKey(device.getSerialNumber())) {
-                connectedDevices.get(device.getSerialNumber()).close();
-            }
-            connectedDevices.remove(device.getSerialNumber());
-
+			FastbootDeviceContext deviceContext;
+			if (connectedDevices.containsKey(device.getSerialNumber()) && (deviceContext = connectedDevices.get(device.getSerialNumber())) != null) {
+				deviceContext.close();
+			}
+			connectedDevices.remove(device.getSerialNumber());
 			for (FastbootDeviceManagerListener listener : listeners) {
 				listener.onFastbootDeviceDetached(device.getSerialNumber());
 			}
@@ -66,19 +68,19 @@ public class FastbootDeviceManager {
 
 		@Override
 		public synchronized void onUsbDeviceConnected(@NonNull UsbDevice device, UsbDeviceConnection connection) {
-			Transport transport = new UsbTransport(findFastbootInterface(device), connection);
-			FastbootDeviceContext deviceContext = new FastbootDeviceContext(transport);
-
-            connectedDevices.get(device.getSerialNumber()).close();
+			FastbootDeviceContext deviceContext0 = connectedDevices.get(device.getSerialNumber());
+			if (deviceContext0 != null) {
+				deviceContext0.close();
+			}
+			FastbootDeviceContext deviceContext = new FastbootDeviceContext(new UsbTransport(FastbootDeviceManager.INSTANCE.findFastbootInterface(device), connection));
             connectedDevices.put(device.getSerialNumber(), deviceContext);
-
 			for (FastbootDeviceManagerListener listener : listeners) {
 				listener.onFastbootDeviceConnected(device.getSerialNumber(), deviceContext);
 			}
 		}
     };
 
-    private static boolean filterDevice(UsbDevice device) {
+    public boolean filterDevice(UsbDevice device) {
         if (device.getDeviceClass() == USB_CLASS &&
 			device.getDeviceSubclass() == USB_SUBCLASS &&
 			device.getDeviceProtocol() == USB_PROTOCOL) {
@@ -87,32 +89,31 @@ public class FastbootDeviceManager {
         return findFastbootInterface(device) != null;
     }
 
-    public static synchronized void addFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
+    public synchronized void addFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
         listeners.add(listener);
         if (listeners.size() == 1) {
             usbDeviceManager.addUsbDeviceManagerListener(usbDeviceManagerListener);
         }
     }
 
-    public static synchronized void removeFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
+    public synchronized void removeFastbootDeviceManagerListener(@NonNull FastbootDeviceManagerListener listener) {
         listeners.remove(listener);
         if (listeners.size() == 0) {
             usbDeviceManager.removeUsbDeviceManagerListener(usbDeviceManagerListener);
         }
     }
 
-	public static synchronized void connectToDevice(@NonNull String deviceId) {
+	public synchronized void connectToDevice(@NonNull String deviceId) {
 		List<UsbDevice> devices = usbDeviceManager.getDevices().values().stream()
 			.filter(new Predicate<UsbDevice>() {
 				@Override
 				public boolean test(UsbDevice p1) {
 					return filterDevice(p1);
 				}
-			}).collect(Collectors.toList());
-			
-		Iterator<UsbDevice> it = devices.iterator();
-		while (it.hasNext()) {
-			UsbDevice device = it.next();
+			})
+			.collect(Collectors.toList());
+
+		for (UsbDevice device : devices) {
 			if (device.getSerialNumber().equals(deviceId)) {
 				usbDeviceManager.connectToDevice(device);
 				break;
@@ -121,7 +122,7 @@ public class FastbootDeviceManager {
 	}
 
 	@NonNull
-	public static synchronized List<String> getAttachedDeviceIds() {
+	public synchronized List<String> getAttachedDeviceIds() {
 		return usbDeviceManager.getDevices().values().stream()
 		    .filter(new Predicate<UsbDevice>() {
 				@Override
@@ -137,22 +138,23 @@ public class FastbootDeviceManager {
 	}
 
 	@NonNull
-	public static synchronized List<String> getConnectedDeviceIds() {
+	public synchronized List<String> getConnectedDeviceIds() {
 		return connectedDevices.keySet().stream().collect(Collectors.toList());
 	}
 
 	@Nullable
-    public static synchronized Pair<String, FastbootDeviceContext> getDeviceContext(@NonNull String deviceId) {
-		Set<Map.Entry<String, FastbootDeviceContext>> entrys = connectedDevices.entrySet();
-		for (Map.Entry<String, FastbootDeviceContext> entry : entrys) {
-			if (entry.getKey().contains(deviceId)) {
-				return new Pair<String, FastbootDeviceContext>(entry.getKey(), entry.getValue());
+    public synchronized Pair<String, FastbootDeviceContext> getDeviceContext(@NonNull String deviceId) {
+		Pair<String, FastbootDeviceContext> pair = null;
+		for (Map.Entry<String, FastbootDeviceContext> entry : connectedDevices.entrySet()) {
+			if (entry.getKey().equals(deviceId)) {
+				pair = new Pair<String, FastbootDeviceContext>(entry.getKey(), entry.getValue());
+				break;
 			}
 		}
-		return null;
+		return pair;
 	}
 	
-	private static UsbInterface findFastbootInterface(UsbDevice device) {
+	public UsbInterface findFastbootInterface(UsbDevice device) {
         for (int i = 0; i < device.getInterfaceCount(); i++) {
             UsbInterface deviceInterface = device.getInterface(i);
             if (deviceInterface.getInterfaceClass() == USB_CLASS &&

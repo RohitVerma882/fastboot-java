@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 
 public class FastbootResponse {
 	@NonNull
-    private ResponseStatus status;
+    private static ResponseStatus status;
 	@NonNull
-    private String data;
+    private static String data;
 
 	public FastbootResponse(@NonNull ResponseStatus status, @NonNull String data) {
         this.status = status;
@@ -16,12 +16,12 @@ public class FastbootResponse {
     }
 
 	@NonNull
-    public ResponseStatus getStatus() {
+    public static ResponseStatus getStatus() {
         return status;
     }
 
 	@NonNull
-    public String getData() {
+    public static String getData() {
         return data;
     }
 

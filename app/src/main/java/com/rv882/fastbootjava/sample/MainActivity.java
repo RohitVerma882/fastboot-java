@@ -5,18 +5,15 @@ import android.widget.Toast;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.rv882.fastbootjava.FastbootDeviceManager;
-import com.rv882.fastbootjava.FastbootDeviceManagerListener;
 import com.rv882.fastbootjava.FastbootDeviceContext;
-import com.rv882.fastbootjava.FastbootResponse;
+import com.rv882.fastbootjava.FastbootDeviceManagerListener;
+import com.rv882.fastbootjava.FastbootDeviceManager;
 
 public class MainActivity extends AppCompatActivity implements FastbootDeviceManagerListener {
 	
 	private TextView textview;
-	@Nullable
+	
 	private FastbootDeviceContext deviceContext;
 
 	@Override
@@ -26,19 +23,17 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 		
 		textview = findViewById(R.id.text);
 		
-		FastbootDeviceManager.addFastbootDeviceManagerListener(this);
+		FastbootDeviceManager.INSTANCE.addFastbootDeviceManagerListener(this);
     }
 	
 	@Override
 	public void onFastbootDeviceAttached(String deviceId) {
+		Toast.makeText(getApplicationContext(), "device attached" + deviceId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onFastbootDeviceDetached(String deviceId) {
-		if (deviceContext != null) {
-			deviceContext.close();
-			deviceContext = null;
-		}
+		closeDeviceContext();
 		
 		textview.setText("No device");
 		Toast.makeText(getApplicationContext(), "device disconnected" + deviceId, Toast.LENGTH_LONG).show();
@@ -54,11 +49,15 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 
 	@Override
 	protected void onDestroy() {
-		FastbootDeviceManager.removeFastbootDeviceManagerListener(this);
+		FastbootDeviceManager.INSTANCE.removeFastbootDeviceManagerListener(this);
+		closeDeviceContext();
+		super.onDestroy();
+	}
+	
+	private void closeDeviceContext() {
 		if (deviceContext != null) {
 			deviceContext.close();
 			deviceContext = null;
 		}
-		super.onDestroy();
 	}
 }

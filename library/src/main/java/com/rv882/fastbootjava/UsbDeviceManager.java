@@ -17,34 +17,35 @@ import android.hardware.usb.UsbManager;
 
 import androidx.annotation.NonNull;
 
-@SuppressLint("UnspecifiedImmutableFlag")
 public class UsbDeviceManager {
 	private static final String ACTION_USB_PERMISSION = "com.rv882.fastbootjava.USB_PERMISSION";
 
 	@NonNull
     private WeakReference<Context> context;
 	@NonNull
-    private ArrayList<UsbDeviceManagerListener> listeners;
+    private ArrayList<UsbDeviceManagerListener> listeners = new ArrayList<UsbDeviceManagerListener>();
 	@NonNull
     private UsbManager usbManager;
 
 	private BroadcastReceiver usbActionReceiver = new BroadcastReceiver() {
 		@Override
         public void onReceive(Context context, Intent intent) {
-            if (intent == null) return;
-			switch (intent.getAction()) {
-				case UsbManager.ACTION_USB_DEVICE_ATTACHED:
-					for (UsbDeviceManagerListener listener : listeners) {
-						UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-						if (listener.filterDevice(device)) listener.onUsbDeviceAttached(device);
+			String action = intent.getAction();
+            if (intent == null || action == null) return;
+			if (action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
+				for (UsbDeviceManagerListener listener : listeners) {
+					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+					if (listener.filterDevice(device)) {
+						listener.onUsbDeviceAttached(device);
 					}
-					break;
-				case UsbManager.ACTION_USB_DEVICE_DETACHED:
-					for (UsbDeviceManagerListener listener : listeners) {
-						UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-						if (listener.filterDevice(device)) listener.onUsbDeviceDetached(device);
+				}
+			} else if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
+				for (UsbDeviceManagerListener listener : listeners) {
+					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+					if (listener.filterDevice(device)) {
+						listener.onUsbDeviceDetached(device);
 					}
-					break;
+				}
             }
         }
     };
@@ -64,8 +65,7 @@ public class UsbDeviceManager {
 
     public UsbDeviceManager(@NonNull WeakReference<Context> context) {
         this.context = context;
-        listeners = new ArrayList<UsbDeviceManagerListener>();
-
+        
         if (context.get() == null) {
 			throw new RuntimeException("null cannot be cast to non-null type android.hardware.usb.UsbManager");
 		} else {
@@ -78,21 +78,17 @@ public class UsbDeviceManager {
 
     public void addUsbDeviceManagerListener(@NonNull UsbDeviceManagerListener listener) {
         listeners.add(listener);
-        if (listeners.size() == 1) {
-            if (context.get() != null) {
-				IntentFilter usbActionFilter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-				usbActionFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-                context.get().registerReceiver(usbActionReceiver, usbActionFilter);
-            }
+        if (listeners.size() == 1 && context.get() != null) {
+			IntentFilter usbActionFilter = new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+			usbActionFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+			context.get().registerReceiver(usbActionReceiver, usbActionFilter);
         }
     }
 
     public void removeUsbDeviceManagerListener(@NonNull UsbDeviceManagerListener listener) {
         listeners.remove(listener);
-        if (listeners.size() == 0) {
-            if (context.get() != null) {
-                context.get().unregisterReceiver(usbActionReceiver);
-            }
+        if (listeners.size() == 0 && context.get() != null) {
+			context.get().unregisterReceiver(usbActionReceiver);
         }
     }
 
@@ -101,6 +97,7 @@ public class UsbDeviceManager {
         return usbManager.getDeviceList();
     }
 
+	@SuppressLint("UnspecifiedImmutableFlag")
     public void connectToDevice(@NonNull UsbDevice device) {
         PendingIntent permissionIntent = PendingIntent.getBroadcast(context.get(), 0, new Intent(ACTION_USB_PERMISSION), 0);
         if (usbManager.hasPermission(device)) {
@@ -110,7 +107,7 @@ public class UsbDeviceManager {
         }
     }
 
-    private void connectToDeviceInternal(UsbDevice device) {
+    public void connectToDeviceInternal(UsbDevice device) {
         UsbDeviceConnection connection = usbManager.openDevice(device);
         for (UsbDeviceManagerListener listener : listeners) {
             if (listener.filterDevice(device)) {
