@@ -6,6 +6,24 @@ Android library for sending fastboot commands from an Android device to a device
 
 Original-Source: https://github.com/google/fastboot-mobile
 
+## Download
+
+Add to project's build.gradle
+```gradle
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+
+Add to module-level build.gradle
+```gradle
+dependencies {
+	implementation 'com.github.RohitVerma882:fastboot-java:main-f3792d2b19-1'
+}
+```
+
 ## Usage
 ### List Attached Fastboot Devices
 ```java
@@ -40,5 +58,5 @@ FastbootDeviceManager.addFastbootDeviceManagerListener(
         }
     });
 
-FastbootDeviceManager.connectToDevice(/* Device Name */ "/dev/bus/usb/001/002");
+FastbootDeviceManager.connectToDevice(/* Device ID */ "/dev/bus/usb/001/002");
 ```
