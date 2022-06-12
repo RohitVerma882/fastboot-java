@@ -1,13 +1,11 @@
 package com.rv882.fastbootjava.sample;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
-
-import com.google.common.io.Files;
-import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
+import java.io.FileWriter;
 
 public class FastbootApp extends Application {
     private final Thread.UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -15,33 +13,35 @@ public class FastbootApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+
 		// Crash handler
 		setupCrashHandler();
 	}
-	
+
 	private void setupCrashHandler() {
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 				@Override
 				public void uncaughtException(Thread p1, Throwable p2) {
 					try {
-						String stackTraceString = Throwables.getStackTraceAsString(p2);
 						File file = new File(getExternalFilesDir(null), "last_crash_logs.txt");
-						Files.createParentDirs(file);
-						Files.write(stackTraceString, file, Charsets.UTF_8);
+						if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+						
+						String stackTraceString = Log.getStackTraceString(p2);
+
+						FileWriter writer = new FileWriter(file);
+						writer.append(stackTraceString);
+						writer.flush();
+						writer.close();
 					} catch (IOException e) {
 						// ignore
 					}
+
 					if (oldHandler != null) {
 						oldHandler.uncaughtException(p1, p2);
 					}
-					killCurrentProcess();
+					android.os.Process.killProcess(android.os.Process.myPid());
+					System.exit(10);
 				}
 			});
 	}
-	
-	private static void killCurrentProcess() {
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(10);
-    }
 }
