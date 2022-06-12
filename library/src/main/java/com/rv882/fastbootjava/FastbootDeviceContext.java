@@ -17,6 +17,11 @@ public class FastbootDeviceContext {
     }
 	
 	@NonNull
+	public FastbootResponse sendCommand(@NonNull FastbootCommand command) {
+		return sendCommand(command, DEFAULT_TIMEOUT, false);
+	}
+	
+	@NonNull
 	public FastbootResponse sendCommand(@NonNull FastbootCommand command, boolean force) {
 		return sendCommand(command, DEFAULT_TIMEOUT, force);
 	}

@@ -32,10 +32,7 @@ public class FastbootResponse {
 
 	@NonNull
     public static FastbootResponse fromString(@NonNull String str) {
-		String substring = str.substring(0, 4);
-		ResponseStatus value = ResponseStatus.valueOf(substring);
-		String substring2 = str.substring(4);
-		return new FastbootResponse(value, substring2);
+		return new FastbootResponse(ResponseStatus.valueOf(str.substring(0, 4)), str.substring(4));
 	}
 
 	public static enum ResponseStatus {

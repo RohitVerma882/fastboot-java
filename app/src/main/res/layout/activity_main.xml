@@ -8,11 +8,25 @@
 	android:background="#FFFFFFFF">
 
 	<TextView
-		android:id="@+id/text"
+		android:id="@+id/textview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="No device"
+		android:text="No device connected"
 		android:textAppearance="?android:attr/textAppearanceMedium"/>
 
+	<Button
+		android:id="@+id/button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Reboot"
+		android:textAppearance="?android:attr/textAppearanceMedium"/>
+	
+	<TextView
+		android:id="@+id/textview2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="No response"
+		android:textAppearance="?android:attr/textAppearanceMedium"/>
+	
 </LinearLayout>
 
