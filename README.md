@@ -8,35 +8,35 @@ Original-Source: https://github.com/google/fastboot-mobile
 
 ## Download
 
-Add to project's build.gradle
+#### Add to project's build.gradle
 ```gradle
 allprojects {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	}
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 }
 ```
 
-Add to module-level build.gradle
+#### Add to module-level build.gradle
 ```gradle
 dependencies {
-	implementation 'com.github.RohitVerma882:fastboot-java:main-f3792d2b19-1'
+    implementation 'com.github.RohitVerma882:fastboot-java:main-f3792d2b19-1'
 }
 ```
 
 ## Usage
-### List Attached Fastboot Devices
+#### List Attached Fastboot Devices
 ```java
 // Includes connected devices.
 List<String> deviceIds = FastbootDeviceManager.getAttachedDeviceIds();
 ```
 
-### List Connected Fastboot Devices
+#### List Connected Fastboot Devices
 ```java
 List<String> deviceIds = FastbootDeviceManager.getConnectedDeviceIds();
 ```
 
-### Connect to a Fastboot Device
+#### Connect to a Fastboot Device
 ```java
 FastbootDeviceManager.addFastbootDeviceManagerListener(
     new FastbootDeviceManagerListener() {
