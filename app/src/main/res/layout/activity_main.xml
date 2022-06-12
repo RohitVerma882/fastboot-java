@@ -7,25 +7,40 @@
 	android:background="@android:color/white">
 
 	<TextView
-		android:id="@+id/textview"
+		android:id="@+id/deviceTextview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="No device connected"
-		android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-	<Button
-		android:id="@+id/button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Reboot"
-		android:textAppearance="?android:attr/textAppearanceMedium"/>
+		android:text="No Connected Device"
+		android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 	<TextView
-		android:id="@+id/textview2"
+		android:id="@+id/responseTextview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="No response"
-		android:textAppearance="?android:attr/textAppearanceMedium"/>
+		android:text="No Response"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_marginTop="8dp"/>
+	
+	<Button
+		android:id="@+id/rebootButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:text="Reboot"/>
+	
+	<EditText
+		android:id="@+id/cmdEditText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:text=""/>
+	
+	<Button
+		android:id="@+id/runButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:text="Run"/>
 
 </LinearLayout>
 

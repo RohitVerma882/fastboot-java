@@ -32,11 +32,6 @@ public class FastbootCommand {
 	public static FastbootCommand rebootBootloader() {
 		return command("reboot-bootloader");
 	}
-	
-	@NonNull
-	public static FastbootCommand powerDown() {
-		return command("powerdown");
-	}
 
 	@NonNull
 	public static FastbootCommand continueBooting() {
