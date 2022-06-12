@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "com.rv882.fastbootjava.sample"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        minSdkVersion 24
+        targetSdkVersion 32
+        versionCode 1
+        versionName "1.0.0"
     }
 	
     buildTypes {

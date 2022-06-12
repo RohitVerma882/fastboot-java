@@ -67,7 +67,7 @@ public class UsbDeviceManager {
         this.context = context;
 
         if (context.get() == null) {
-			throw new RuntimeException("null cannot be cast to non-null type android.hardware.usb.UsbManager");
+			throw new RuntimeException("context null in UsbDeviceManager");
 		} else {
 			usbManager = (UsbManager)context.get().getSystemService(Context.USB_SERVICE);
 
