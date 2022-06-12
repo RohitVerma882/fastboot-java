@@ -19,6 +19,7 @@
 		android:layout_height="wrap_content"
 		android:text="No Response"
 		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textIsSelectable="true"
 		android:layout_marginTop="8dp"/>
 	
 	<Button

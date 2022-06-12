@@ -9,7 +9,7 @@ public class FastbootResponse {
     private static ResponseStatus status;
 	@NonNull
     private static String data;
-
+	
 	public FastbootResponse(@NonNull ResponseStatus status, @NonNull String data) {
         this.status = status;
         this.data = data;
@@ -32,19 +32,24 @@ public class FastbootResponse {
 
 	@NonNull
     public static FastbootResponse fromString(@NonNull String str) {
-		return new FastbootResponse(ResponseStatus.valueOf(str.substring(0, 4)), str.substring(4));
+		try {
+			return new FastbootResponse(ResponseStatus.valueOf(str.substring(0, 4)), str.substring(4));
+		} catch (IllegalArgumentException ex) {
+			return new FastbootResponse(ResponseStatus.UNKNOWN, str);
+		}
 	}
 
 	public static enum ResponseStatus {
         INFO("INFO"),
         FAIL("FAIL"),
         OKAY("OKAY"),
-        DATA("DATA");
+        DATA("DATA"),
+		UNKNOWN("UNKNOWN");
 
 		@NonNull
 		private String text;
 		
-        private ResponseStatus(String text) {
+        private ResponseStatus(@NonNull String text) {
             this.text = text;
         }
 
