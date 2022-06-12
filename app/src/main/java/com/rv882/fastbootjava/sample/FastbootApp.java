@@ -26,7 +26,7 @@ public class FastbootApp extends Application {
 				public void uncaughtException(Thread p1, Throwable p2) {
 					try {
 						String stackTraceString = Throwables.getStackTraceAsString(p2);
-						File file = new File(getExternalFilesDir(null), "last_crash_log.txt");
+						File file = new File(getExternalFilesDir(null), "last_crash_logs.txt");
 						Files.createParentDirs(file);
 						Files.write(stackTraceString, file, Charsets.UTF_8);
 					} catch (IOException e) {

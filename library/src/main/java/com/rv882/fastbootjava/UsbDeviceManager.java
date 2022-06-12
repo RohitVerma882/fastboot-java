@@ -31,7 +31,7 @@ public class UsbDeviceManager {
 		@Override
         public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-            if (intent == null) return;
+            if (intent == null || action == null) return;
 			if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
 				for (UsbDeviceManagerListener listener : listeners) {
 					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
@@ -65,7 +65,7 @@ public class UsbDeviceManager {
 
     public UsbDeviceManager(@NonNull WeakReference<Context> context) {
         this.context = context;
-        
+
         if (context.get() == null) {
 			throw new RuntimeException("null cannot be cast to non-null type android.hardware.usb.UsbManager");
 		} else {

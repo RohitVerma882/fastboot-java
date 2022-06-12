@@ -23,20 +23,20 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 		
 		textview = findViewById(R.id.text);
 		
-		FastbootDeviceManager.getInstance().addFastbootDeviceManagerListener(this);
+		FastbootDeviceManager.Instance.addFastbootDeviceManagerListener(this);
     }
 	
 	@Override
 	public void onFastbootDeviceAttached(String deviceId) {
-		Toast.makeText(getApplicationContext(), "device attached" + deviceId, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), " device attached" + deviceId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onFastbootDeviceDetached(String deviceId) {
 		closeDeviceContext();
 		
-		textview.setText("No device");
-		Toast.makeText(getApplicationContext(), "device disconnected" + deviceId, Toast.LENGTH_LONG).show();
+		textview.setText("No device connected");
+		Toast.makeText(getApplicationContext(), " device disconnected" + deviceId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 		this.deviceContext = deviceContext;
 		
 		textview.setText("Device: " + deviceId);
-		Toast.makeText(getApplicationContext(), "device connected" + deviceId, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), " device connected" + deviceId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	protected void onDestroy() {
-		FastbootDeviceManager.getInstance().removeFastbootDeviceManagerListener(this);
+		FastbootDeviceManager.Instance.removeFastbootDeviceManagerListener(this);
 		closeDeviceContext();
 		super.onDestroy();
 	}
