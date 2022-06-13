@@ -1,4 +1,7 @@
 # Fastboot Java
+[![](https://img.shields.io/badge/Minimum%20Sdk-24-2196F3)](https://github.com/RohitVermaOP/fastboot-java)
+[![](https://jitpack.io/v/RohitVermaOP/RLottie-Android.svg)](https://jitpack.io/#RohitVermaOP/fastboot-java)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
 Android library for sending fastboot commands from an Android device to a device running fastboot.
 
