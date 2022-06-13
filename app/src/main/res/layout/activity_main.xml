@@ -10,14 +10,14 @@
 		android:id="@+id/deviceTextview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="No Connected Device"
+		android:text="No connected device"
 		android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 	<TextView
 		android:id="@+id/responseTextview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="No Response"
+		android:text="No response"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textIsSelectable="true"
 		android:layout_marginTop="8dp"/>

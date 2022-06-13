@@ -86,14 +86,14 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 	public void onFastbootDeviceDetached(String deviceId) {
 		closeDeviceContext();
 		
-		deviceTextview.setText("No Connected Device");
+		deviceTextview.setText("No connected device");
 	}
 
 	@Override
 	public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
 		this.deviceContext = deviceContext;
 		
-		deviceTextview.setText("Connected Device: " + deviceId);
+		deviceTextview.setText("Connected device: " + deviceId);
 	}
 
 	@Override
