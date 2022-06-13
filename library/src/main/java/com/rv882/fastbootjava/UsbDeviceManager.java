@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
@@ -23,7 +24,7 @@ public class UsbDeviceManager {
 	@NonNull
     private WeakReference<Context> context;
 	@NonNull
-    private ArrayList<UsbDeviceManagerListener> listeners = new ArrayList<>();
+    private List<UsbDeviceManagerListener> listeners = new ArrayList<UsbDeviceManagerListener>();
 	@NonNull
     private UsbManager usbManager;
 
@@ -65,7 +66,7 @@ public class UsbDeviceManager {
 
     public UsbDeviceManager(@NonNull WeakReference<Context> context) {
         this.context = context;
-
+		
         if (context.get() == null) {
 			throw new RuntimeException("context null in UsbDeviceManager");
 		} else {

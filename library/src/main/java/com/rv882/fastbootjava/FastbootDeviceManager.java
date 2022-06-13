@@ -37,7 +37,7 @@ public class FastbootDeviceManager {
     @NonNull
 	private static UsbDeviceManager usbDeviceManager = new UsbDeviceManager(new WeakReference<Context>(FastbootMobile.getApplicationContext()));
     @NonNull
-	private static ArrayList<FastbootDeviceManagerListener> listeners = new ArrayList<>();
+	private static List<FastbootDeviceManagerListener> listeners = new ArrayList<>();
 	@NonNull
     public static FastbootDeviceManager Instance = new FastbootDeviceManager();
 
@@ -71,11 +71,11 @@ public class FastbootDeviceManager {
 
 		@Override
 		public synchronized void onUsbDeviceConnected(@NonNull UsbDevice device, UsbDeviceConnection connection) {
-			FastbootDeviceContext deviceContext0 = connectedDevices.get(device.getDeviceName());
-			if (deviceContext0 != null) {
-				deviceContext0.close();
+			FastbootDeviceContext deviceContext = connectedDevices.get(device.getDeviceName());
+			if (deviceContext != null) {
+				deviceContext.close();
 			}
-			FastbootDeviceContext deviceContext = new FastbootDeviceContext(new UsbTransport(Instance.findFastbootInterface(device), connection));
+			deviceContext = new FastbootDeviceContext(new UsbTransport(Instance.findFastbootInterface(device), connection));
             connectedDevices.put(device.getDeviceName(), deviceContext);
 			for (FastbootDeviceManagerListener listener : listeners) {
 				listener.onFastbootDeviceConnected(device.getDeviceName(), deviceContext);
@@ -147,14 +147,13 @@ public class FastbootDeviceManager {
 
 	@Nullable
     public synchronized Pair<String, FastbootDeviceContext> getDeviceContext(@NonNull String deviceId) {
-		Pair<String, FastbootDeviceContext> pair = null;
 		for (Map.Entry<String, FastbootDeviceContext> entry : connectedDevices.entrySet()) {
 			if (!entry.getKey().equals(deviceId)) {
 				continue;
 			}
-			pair = new Pair<String, FastbootDeviceContext>(entry.getKey(), entry.getValue());
+			return new Pair<String, FastbootDeviceContext>(entry.getKey(), entry.getValue());
 		}
-		return pair;
+		return null;
 	}
 
 	private UsbInterface findFastbootInterface(UsbDevice device) {

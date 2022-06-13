@@ -7,12 +7,10 @@
 	<uses-feature android:name="android.hardware.usb.host"/>
 	
   <application>
-	  
     <provider
         android:name=".FastbootInitProvider"
         android:authorities=".FastbootInitProvider"
         android:exported="false"/>
-	
   </application>
 
 </manifest>
