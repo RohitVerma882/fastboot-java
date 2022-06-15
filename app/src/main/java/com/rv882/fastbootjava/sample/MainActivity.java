@@ -20,10 +20,9 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 	
 	private TextView deviceTextview;
 	private TextView responseTextview;
-	private EditText cmdEditText;
 	
 	private Button rebootButton;
-	private Button runButton;
+	private Button serialButton;
 	
 	private FastbootDeviceContext deviceContext;
 	
@@ -32,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 		
+		FastbootDeviceManager.Instance.addFastbootDeviceManagerListener(this);
+		
 		deviceTextview = findViewById(R.id.deviceTextview);
 		responseTextview = findViewById(R.id.responseTextview);
-		cmdEditText = findViewById(R.id.cmdEditText);
 		
 		rebootButton = findViewById(R.id.rebootButton);
 		rebootButton.setOnClickListener(new OnClickListener() {
@@ -44,21 +44,18 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 				}
 			});
 			
-		runButton = findViewById(R.id.runButton);
-		runButton.setOnClickListener(new OnClickListener() {
+		serialButton = findViewById(R.id.serialButton);
+		serialButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View p1) {
-					run();
+					getSerial();
 				}
 			});
-		
-		FastbootDeviceManager.Instance.addFastbootDeviceManagerListener(this);
     }
 	
-	private void run() {
-		String cmd = cmdEditText.getText().toString();
-		if (!cmd.isEmpty() && deviceContext != null) {
-			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.command(cmd), false);
+	private void getSerial() {
+		if (deviceContext != null) {
+			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("serialno"), false);
 			responseTextview.setText(response.getData());
 		}
 	}

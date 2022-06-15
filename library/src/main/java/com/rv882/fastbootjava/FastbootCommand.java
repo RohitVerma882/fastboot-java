@@ -4,13 +4,28 @@ import androidx.annotation.NonNull;
 
 public class FastbootCommand {
 	@NonNull
-	public static FastbootCommand oem(@NonNull String arg) {
-		return command(String.format("oem %s", arg));
+	public static FastbootCommand erase(@NonNull String partition) {
+		return command(String.format("erase:%s", partition));
+	}
+	
+	@NonNull
+	public static FastbootCommand flash(@NonNull String partition) {
+		return command(String.format("flash:%s", partition));
+	}
+	
+	@NonNull
+	public static FastbootCommand verify(@NonNull byte[] bytes) {
+		return command(String.format("verify:%08x", bytes.length));
 	}
 	
 	@NonNull
 	public static FastbootCommand download(@NonNull byte[] bytes) {
 		return command(String.format("download:%08x", bytes.length));
+	}
+	
+	@NonNull
+	public static FastbootCommand oem(@NonNull String arg) {
+		return command(String.format("oem %s", arg));
 	}
 	
 	@NonNull
@@ -21,6 +36,11 @@ public class FastbootCommand {
 	@NonNull
 	public static FastbootCommand setActiveSlot(@NonNull String slot) {
 		return command(String.format("set_active:%s", slot));
+	}
+	
+	@NonNull
+	public static FastbootCommand boot() {
+		return command("boot");
 	}
 	
 	@NonNull
@@ -39,7 +59,7 @@ public class FastbootCommand {
 	}
 	
 	@NonNull
-	public static FastbootCommand command(@NonNull String command) {
+	private static FastbootCommand command(@NonNull String command) {
 		return new FastbootCommand(command);
 	}
 	

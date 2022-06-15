@@ -29,20 +29,12 @@
 		android:layout_marginTop="16dp"
 		android:text="Reboot"/>
 	
-	<EditText
-		android:id="@+id/cmdEditText"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="16dp"
-		android:hint="Fastboot command"
-		android:text="getvar:serialno"/>
-	
 	<Button
-		android:id="@+id/runButton"
+		android:id="@+id/serialButton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="8dp"
-		android:text="Run"/>
+		android:text="Get Serial"/>
 
 </LinearLayout>
 
