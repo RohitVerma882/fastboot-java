@@ -15,12 +15,7 @@ public class FastbootDeviceContext {
     public FastbootDeviceContext(@NonNull Transport transport) {
         this.transport = transport;
     }
-	
-	@NonNull
-	public FastbootResponse sendCommand(@NonNull FastbootCommand command) {
-		return sendCommand(command, DEFAULT_TIMEOUT, false);
-	}
-	
+
 	@NonNull
 	public FastbootResponse sendCommand(@NonNull FastbootCommand command, boolean force) {
 		return sendCommand(command, DEFAULT_TIMEOUT, force);
@@ -28,12 +23,22 @@ public class FastbootDeviceContext {
 
 	@NonNull
     public FastbootResponse sendCommand(@NonNull FastbootCommand command, int timeout, boolean force) {
+        String commandStr = command.toString();
+        byte[] bytes = commandStr.getBytes(StandardCharsets.UTF_8);
+        return sendCommand(bytes, timeout, force);
+    }
+
+	@NonNull
+	public FastbootResponse sendCommand(@NonNull byte[] buffer, boolean force) {
+		return sendCommand(buffer, DEFAULT_TIMEOUT, force);
+	}
+
+	@NonNull
+    public FastbootResponse sendCommand(@NonNull byte[] buffer, int timeout, boolean force) {
         if (!transport.isConnected()) {
             transport.connect(force);
         }
-        String commandStr = command.toString();
-        byte[] bytes = commandStr.getBytes(StandardCharsets.UTF_8);
-        transport.send(bytes, timeout);
+        transport.send(buffer, timeout);
         byte[] responseBytes = new byte[64];
         transport.receive(responseBytes, timeout);
         return FastbootResponse.fromBytes(responseBytes);
@@ -44,4 +49,5 @@ public class FastbootDeviceContext {
         transport.close();
     }
 }
+
 

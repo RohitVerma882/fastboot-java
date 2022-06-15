@@ -58,14 +58,14 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 	private void run() {
 		String cmd = cmdEditText.getText().toString();
 		if (!cmd.isEmpty() && deviceContext != null) {
-			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.command(cmd));
+			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.command(cmd), false);
 			responseTextview.setText(response.getData());
 		}
 	}
 	
 	private void reboot() {
 		if (deviceContext != null) {
-			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot());
+			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot(), false);
 			responseTextview.setText(response.getData());
 		}
 	}
