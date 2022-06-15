@@ -1,12 +1,11 @@
 package com.rv882.fastbootjava.sample;
 
 import android.os.Bundle;
-import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.view.View;
-import android.widget.EditText;
+import android.util.Pair;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,15 +15,16 @@ import com.rv882.fastbootjava.FastbootDeviceManager;
 import com.rv882.fastbootjava.FastbootResponse;
 import com.rv882.fastbootjava.FastbootCommand;
 
+import com.rv882.fastbootjava.sample.data.FastbootDevice;
+
 public class MainActivity extends AppCompatActivity implements FastbootDeviceManagerListener {
 
 	private TextView deviceTextview;
 	private TextView responseTextview;
 
 	private Button rebootButton;
-	private Button serialButton;
-
-	private FastbootDeviceContext deviceContext;
+	
+	private FastbootDevice device;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,32 +43,27 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 					reboot();
 				}
 			});
-
-		serialButton = findViewById(R.id.serialButton);
-		serialButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View p1) {
-					getSerial();
-				}
-			});
     }
 
-	private void getSerial() {
-		if (deviceContext != null) {
-			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("serialno"), false);
-			responseTextview.setText(response.getData());
-		}
-	}
-
 	private void reboot() {
-		if (deviceContext != null) {
+		if (device == null) {
+			return;
+		}
+		Pair<String, FastbootDeviceContext> pair = FastbootDeviceManager.Instance.getDeviceContext(device.getDeviceId());
+		FastbootDeviceContext deviceContext = null;
+		if (pair != null && (deviceContext = pair.second) != null) {
 			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot(), false);
 			responseTextview.setText(response.getData());
 		}
 	}
 
 	private void closeDeviceContext() {
-		if (deviceContext != null) {
+		if (device == null) {
+			return;
+		}
+		Pair<String, FastbootDeviceContext> pair = FastbootDeviceManager.Instance.getDeviceContext(device.getDeviceId());
+		FastbootDeviceContext deviceContext = null;
+		if (pair != null && (deviceContext = pair.second) != null) {
 			deviceContext.close();
 			deviceContext = null;
 		}
@@ -88,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 
 	@Override
 	public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
-		this.deviceContext = deviceContext;
+		device = FastbootDevice.fromDeviceContext(deviceId, deviceContext);
 
-		deviceTextview.setText("Connected device: " + deviceId);
+		deviceTextview.setText("Connected device: " + device.getSerialNumber());
 	}
 
 	@Override

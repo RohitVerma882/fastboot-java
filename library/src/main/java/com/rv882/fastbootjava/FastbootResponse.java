@@ -26,8 +26,8 @@ public class FastbootResponse {
     }
 
 	@NonNull
-    public static FastbootResponse fromBytes(@NonNull byte[] buffer) {
-        return fromString(new String(buffer, StandardCharsets.UTF_8));
+    public static FastbootResponse fromBytes(@NonNull byte[] bytes) {
+        return fromString(new String(bytes, StandardCharsets.UTF_8));
     }
 
 	@NonNull

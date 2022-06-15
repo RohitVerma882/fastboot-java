@@ -108,7 +108,7 @@ public class UsbDeviceManager {
         }
     }
 
-    public void connectToDeviceInternal(UsbDevice device) {
+    private void connectToDeviceInternal(UsbDevice device) {
         UsbDeviceConnection connection = usbManager.openDevice(device);
         for (UsbDeviceManagerListener listener : listeners) {
             if (listener.filterDevice(device)) {
