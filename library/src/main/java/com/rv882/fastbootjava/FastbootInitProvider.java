@@ -11,7 +11,7 @@ public class FastbootInitProvider extends ContentProvider {
 	public boolean onCreate() {
 		try {
             if (getContext() == null) throw new Exception("Failed to get context.");
-            FastbootMobile.initialize(getContext());
+            FastbootJava.initialize(getContext());
         } catch (Exception ex) {
             
         }

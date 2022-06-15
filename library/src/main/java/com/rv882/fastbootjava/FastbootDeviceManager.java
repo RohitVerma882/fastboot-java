@@ -35,7 +35,7 @@ public class FastbootDeviceManager {
 	@NonNull
     private static HashMap<String, FastbootDeviceContext> connectedDevices = new HashMap<>();
     @NonNull
-	private static UsbDeviceManager usbDeviceManager = new UsbDeviceManager(new WeakReference<Context>(FastbootMobile.getApplicationContext()));
+	private static UsbDeviceManager usbDeviceManager = new UsbDeviceManager(new WeakReference<Context>(FastbootJava.getApplicationContext()));
     @NonNull
 	private static List<FastbootDeviceManagerListener> listeners = new ArrayList<>();
 	@NonNull

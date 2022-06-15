@@ -6,7 +6,7 @@ import java.lang.ref.WeakReference;
 
 import androidx.annotation.NonNull;
 
-public class FastbootMobile {
+public class FastbootJava {
 	private static WeakReference<Context> applicationContext;
 
     public static synchronized void initialize(Context context) {
