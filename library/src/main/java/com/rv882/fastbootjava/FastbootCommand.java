@@ -39,6 +39,11 @@ public class FastbootCommand {
 	}
 	
 	@NonNull
+	public static FastbootCommand powerDown() {
+		return command("powerdown");
+	}
+	
+	@NonNull
 	public static FastbootCommand boot() {
 		return command("boot");
 	}
