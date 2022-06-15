@@ -9,8 +9,8 @@ public class FastbootCommand {
 	}
 	
 	@NonNull
-	public static FastbootCommand download(@NonNull byte[] buffer) {
-		return command(String.format("download:%08x", buffer.length));
+	public static FastbootCommand download(@NonNull byte[] bytes) {
+		return command(String.format("download:%08x", bytes.length));
 	}
 	
 	@NonNull

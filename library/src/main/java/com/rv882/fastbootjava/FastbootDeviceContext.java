@@ -29,16 +29,16 @@ public class FastbootDeviceContext {
     }
 
 	@NonNull
-	public FastbootResponse sendCommand(@NonNull byte[] buffer, boolean force) {
-		return sendCommand(buffer, DEFAULT_TIMEOUT, force);
+	public FastbootResponse sendCommand(@NonNull byte[] bytes, boolean force) {
+		return sendCommand(bytes, DEFAULT_TIMEOUT, force);
 	}
 
 	@NonNull
-    public FastbootResponse sendCommand(@NonNull byte[] buffer, int timeout, boolean force) {
+    public FastbootResponse sendCommand(@NonNull byte[] bytes, int timeout, boolean force) {
         if (!transport.isConnected()) {
             transport.connect(force);
         }
-        transport.send(buffer, timeout);
+        transport.send(bytes, timeout);
         byte[] responseBytes = new byte[64];
         transport.receive(responseBytes, timeout);
         return FastbootResponse.fromBytes(responseBytes);
