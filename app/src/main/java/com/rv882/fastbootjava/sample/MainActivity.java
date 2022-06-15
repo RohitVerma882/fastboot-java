@@ -17,25 +17,25 @@ import com.rv882.fastbootjava.FastbootResponse;
 import com.rv882.fastbootjava.FastbootCommand;
 
 public class MainActivity extends AppCompatActivity implements FastbootDeviceManagerListener {
-	
+
 	private TextView deviceTextview;
 	private TextView responseTextview;
-	
+
 	private Button rebootButton;
 	private Button serialButton;
-	
+
 	private FastbootDeviceContext deviceContext;
-	
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-		
+
 		FastbootDeviceManager.Instance.addFastbootDeviceManagerListener(this);
-		
+
 		deviceTextview = findViewById(R.id.deviceTextview);
 		responseTextview = findViewById(R.id.responseTextview);
-		
+
 		rebootButton = findViewById(R.id.rebootButton);
 		rebootButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 					reboot();
 				}
 			});
-			
+
 		serialButton = findViewById(R.id.serialButton);
 		serialButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -52,28 +52,28 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 				}
 			});
     }
-	
+
 	private void getSerial() {
 		if (deviceContext != null) {
 			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("serialno"), false);
 			responseTextview.setText(response.getData());
 		}
 	}
-	
+
 	private void reboot() {
 		if (deviceContext != null) {
 			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot(), false);
 			responseTextview.setText(response.getData());
 		}
 	}
-	
+
 	private void closeDeviceContext() {
 		if (deviceContext != null) {
 			deviceContext.close();
 			deviceContext = null;
 		}
 	}
-	
+
 	@Override
 	public void onFastbootDeviceAttached(String deviceId) {
 		FastbootDeviceManager.Instance.connectToDevice(deviceId);
@@ -82,14 +82,14 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 	@Override
 	public void onFastbootDeviceDetached(String deviceId) {
 		closeDeviceContext();
-		
+
 		deviceTextview.setText("No connected device");
 	}
 
 	@Override
 	public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
 		this.deviceContext = deviceContext;
-		
+
 		deviceTextview.setText("Connected device: " + deviceId);
 	}
 
