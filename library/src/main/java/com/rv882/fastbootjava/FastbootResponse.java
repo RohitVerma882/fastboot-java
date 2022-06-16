@@ -32,11 +32,7 @@ public class FastbootResponse {
 
 	@NonNull
     public static FastbootResponse fromString(@NonNull String str) {
-		try {
-			return new FastbootResponse(ResponseStatus.valueOf(str.substring(0, 4)), str.substring(4));
-		} catch (IllegalArgumentException ex) {
-			return new FastbootResponse(ResponseStatus.UNKNOWN, str);
-		}
+		return new FastbootResponse(ResponseStatus.fromString(str.substring(0, 4)), str.substring(4));
 	}
 
 	public static enum ResponseStatus {
@@ -49,8 +45,21 @@ public class FastbootResponse {
 		@NonNull
 		private String text;
 		
-        private ResponseStatus(@NonNull String text) {
+        private ResponseStatus(String text) {
             this.text = text;
+        }
+		
+		@NonNull
+		private static ResponseStatus fromString(String text) {
+            if (text == null) {
+                return UNKNOWN;
+            }
+            for (ResponseStatus s : ResponseStatus.values()) {
+                if (text.equals(s.toString())) {
+                    return s;
+                }
+            }
+            return UNKNOWN;
         }
 
 		@NonNull
