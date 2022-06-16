@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 		if (pair != null && (deviceContext = pair.second) != null) {
 			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot());
 			responseTextview.setText(response.getData());
+			responseTextview.append("\n" + response.getStatus().getText());
 		}
 	}
 
