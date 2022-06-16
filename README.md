@@ -1,5 +1,5 @@
 # Fastboot Java
-[![](https://img.shields.io/badge/Minimum%20Sdk-24-2196F3)](https://github.com/RohitVermaOP/fastboot-java)
+[![](https://img.shields.io/badge/Minimum%20Sdk-24-00BCD4)](https://github.com/RohitVermaOP/fastboot-java)
 [![](https://jitpack.io/v/RohitVerma882/fastboot-java.svg)](https://jitpack.io/#RohitVerma882/fastboot-java)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
@@ -56,8 +56,8 @@ FastbootDeviceManager.addFastbootDeviceManagerListener(
         @Override
         public void onFastbootDeviceConnected(String deviceId, FastbootDeviceContext deviceContext) {
             // Do some fastboot stuff...
-            FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("current-slot"));
-            String bootSlot = response.getData();
+            FastbootResponse response = deviceContext.sendCommand(FastbootCommand.getVar("product"));
+            String product = response.getData();
         }
     });
 
