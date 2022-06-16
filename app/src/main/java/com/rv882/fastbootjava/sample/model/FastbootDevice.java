@@ -1,4 +1,4 @@
-package com.rv882.fastbootjava.sample.data;
+package com.rv882.fastbootjava.sample.model;
 
 import androidx.annotation.NonNull;
 
@@ -33,6 +33,6 @@ public class FastbootDevice {
 	
 	@NonNull
 	public static FastbootDevice fromDeviceContext(@NonNull String deviceId, @NonNull FastbootDeviceContext deviceContext) {
-		return new FastbootDevice(deviceId, deviceContext.sendCommand(FastbootCommand.getVar("serialno"), false).getData());
+		return new FastbootDevice(deviceId, deviceContext.sendCommand(FastbootCommand.getVar("serialno")).getData());
 	}
 }

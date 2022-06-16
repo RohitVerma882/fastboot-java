@@ -8,6 +8,8 @@ import android.view.View;
 import android.util.Pair;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.rv882.fastbootjava.FastbootDeviceContext;
 import com.rv882.fastbootjava.FastbootDeviceManagerListener;
@@ -15,15 +17,16 @@ import com.rv882.fastbootjava.FastbootDeviceManager;
 import com.rv882.fastbootjava.FastbootResponse;
 import com.rv882.fastbootjava.FastbootCommand;
 
-import com.rv882.fastbootjava.sample.data.FastbootDevice;
+import com.rv882.fastbootjava.sample.model.FastbootDevice;
 
 public class MainActivity extends AppCompatActivity implements FastbootDeviceManagerListener {
-
+	@NonNull
 	private TextView deviceTextview;
+	@NonNull
 	private TextView responseTextview;
-
+	@NonNull
 	private Button rebootButton;
-	
+	@Nullable
 	private FastbootDevice device;
 
 	@Override
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FastbootDeviceMan
 		Pair<String, FastbootDeviceContext> pair = FastbootDeviceManager.Instance.getDeviceContext(device.getDeviceId());
 		FastbootDeviceContext deviceContext = null;
 		if (pair != null && (deviceContext = pair.second) != null) {
-			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot(), false);
+			FastbootResponse response = deviceContext.sendCommand(FastbootCommand.reboot());
 			responseTextview.setText(response.getData());
 		}
 	}

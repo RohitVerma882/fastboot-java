@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 
+import androidx.annotation.NonNull;
+
 public class FastbootApp extends Application {
+	@NonNull
     private final Thread.UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();
 
 	@Override

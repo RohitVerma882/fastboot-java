@@ -15,6 +15,11 @@ public class FastbootDeviceContext {
     public FastbootDeviceContext(@NonNull Transport transport) {
         this.transport = transport;
     }
+	
+	@NonNull
+	public FastbootResponse sendCommand(@NonNull FastbootCommand command) {
+		return sendCommand(command, DEFAULT_TIMEOUT, false);
+	}
 
 	@NonNull
 	public FastbootResponse sendCommand(@NonNull FastbootCommand command, boolean force) {
@@ -27,6 +32,11 @@ public class FastbootDeviceContext {
         byte[] bytes = commandStr.getBytes(StandardCharsets.UTF_8);
         return sendCommand(bytes, timeout, force);
     }
+	
+	@NonNull
+	public FastbootResponse sendCommand(@NonNull byte[] bytes) {
+		return sendCommand(bytes, DEFAULT_TIMEOUT, false);
+	}
 
 	@NonNull
 	public FastbootResponse sendCommand(@NonNull byte[] bytes, boolean force) {
