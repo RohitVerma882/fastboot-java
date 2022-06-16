@@ -71,7 +71,7 @@ public class FastbootCommand {
 	@NonNull
     private String command;
 	
-    private FastbootCommand(String command) {
+    private FastbootCommand(@NonNull String command) {
         this.command = command;
     }
 

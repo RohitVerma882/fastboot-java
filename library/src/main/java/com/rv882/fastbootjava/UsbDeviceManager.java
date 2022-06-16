@@ -28,6 +28,7 @@ public class UsbDeviceManager {
 	@NonNull
     private UsbManager usbManager;
 
+	@NonNull
 	private BroadcastReceiver usbActionReceiver = new BroadcastReceiver() {
 		@Override
         public void onReceive(Context context, Intent intent) {
@@ -51,6 +52,7 @@ public class UsbDeviceManager {
         }
     };
 
+	@NonNull
     private BroadcastReceiver usbPermissionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

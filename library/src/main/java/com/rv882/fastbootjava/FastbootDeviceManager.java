@@ -44,6 +44,7 @@ public class FastbootDeviceManager {
 	private FastbootDeviceManager() {
 	}
 
+	@NonNull
 	private UsbDeviceManagerListener usbDeviceManagerListener = new UsbDeviceManagerListener() {
 		@Override
 		public boolean filterDevice(@NonNull UsbDevice device) {
