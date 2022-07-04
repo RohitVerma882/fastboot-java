@@ -1,4 +1,4 @@
-package com.rv882.fastbootjava.sample.model;
+package com.rv882.fastbootjava.sample.data;
 
 import androidx.annotation.NonNull;
 
@@ -35,4 +35,17 @@ public class FastbootDevice {
 	public static FastbootDevice fromDeviceContext(@NonNull String deviceId, @NonNull FastbootDeviceContext deviceContext) {
 		return new FastbootDevice(deviceId, deviceContext.sendCommand(FastbootCommand.getVar("serialno")).getData());
 	}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof FastbootDevice) {
+            if (((FastbootDevice)obj).getDeviceId().equals(deviceId)) {
+                return true;
+            }
+            if (((FastbootDevice)obj).getSerialNumber().equals(serialNumber)) {
+                return true;
+            }
+        }
+        return super.equals(obj);
+    }
 }

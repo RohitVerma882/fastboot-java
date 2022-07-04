@@ -15,9 +15,10 @@
 		android:theme="@style/AppTheme"
         android:supportsRtl="false"
 		tools:replace="android:supportsRtl">
-		
+        
 		<activity android:name=".MainActivity"
 			android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTask"
             android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
